@@ -8,38 +8,38 @@ def extract_page_contacts(url):
 	r = requests.get(url)
 	page_html = BeautifulSoup(r.content, "lxml")
 
-	items = page_html.find_all("div", {"class":"vcard"})
+	items = page_html.find_all("section", {"class":"vcard"})
 	for item in items:
 
 		print "---------------"
-		name = item.find("span", {"itemprop":"name"}).text.strip()
+		name = item.find("h1", {"itemprop":"name"}).text.strip()
 		print "Nome: %s" %(name)
 		
-		address = item.find("span", {"itemprop":"streetAddress"})
+		address = item.find("span", {"class":"streetAddress"})
 		if address:
 			print "Indirizzo: %s" %(address.text.strip())
 		else:
 			address = ""
 		
-		postalCode = item.find("span", {"itemprop":"postalCode"})
+		postalCode = item.find("span", {"class":"postalCode"})
 		if postalCode:
 			print "CAP: %s" %(postalCode.text.strip())
 		else:
 			postalCode = ""
 		
-		addressLocality = item.find("span", {"itemprop":"addressLocality"})
+		addressLocality = item.find("span", {"class":"locality"})
 		if addressLocality:
 			print "Citta: %s" %(addressLocality.text.strip())
 		else:
 			addressLocality = ""
 
-                addressRegion = item.find("span", {"itemprop":"addressRegion"})
+                addressRegion = item.find("span", {"class":"region"})
                 if addressRegion:
                         print "Provincia: %s" %(addressRegion.text.strip())
                 else:
                         addressRegion = ""
 		
-		telephone = item.find("div", {"itemprop":"telephone"})
+		telephone = item.find("div", {"class":"phoneNumbers"})
 		if telephone:
 			print "Telefono: %s" %(telephone.text.strip())
 		else:
@@ -54,5 +54,5 @@ parser.add_argument('-c', '--cosa', dest='cosa', help='Nome azienda, attivita o 
 parser.add_argument('-d', '--dove', dest='dove', help='Localita, indirizzo da cercare')
 args = parser.parse_args()
 
-url = "http://www.paginegialle.it/pgol/4-%s/3-%s?mr=50" %(args.cosa, args.dove)
+url = "https://www.paginegialle.it/ricerca/%s/%s?" %(args.cosa, args.dove)
 extract_page_contacts(url)
