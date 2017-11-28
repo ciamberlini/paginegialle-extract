@@ -12,7 +12,7 @@ def extract_page_contacts(url):
     page_html = BeautifulSoup(r.content, "lxml")
 
     items = page_html.find_all("section", {"class":"vcard"})
-	
+    
     for item in items:
         vcard = VCard()
         
@@ -37,10 +37,12 @@ def extract_page_contacts(url):
         _phoneNumbers = item.find("div", {"class":"phoneNumbers"})
         if _phoneNumbers:
             vcard.phoneNumbers = _phoneNumbers.text.strip()
+			
+		_coords = 
         
         print (vcard)
-		
-		vcards.push(vcard.toJson())
+        
+        vcards.append(vcard.toJson())
         
     for next_button in page_html.find_all("a", {"class":"rightArrowBtn"}, href=True):
         next_button['href'] = urljoin(url,next_button['href'])
@@ -56,5 +58,5 @@ extract_page_contacts(url)
 
 print('[')
 for v in vcards:
-	print (v)
+    print (v)
 print(']')
